@@ -21,28 +21,25 @@ How the skills bind to Linear. Each skill produces an artifact; this reference s
 
 | Event | Skill | Artifact goes | Linear moves |
 |---|---|---|---|
-| Work arrives | sizing rule below | an issue or a project | `Ideas` if it is not yet sized or specced |
+| Work arrives | sizing rule below | an issue or a project | `Backlog` if it is not yet sized or specced |
 | Project shaped | `shape`, then `intent` | `agent-docs/intents/<slug>.md`, landed on main | project created at `planned`: name is the H1, description is the Goal's first sentence, overview is the link to the file on main, team and `--initiative` are the venture's |
 | Intent sliced | `spec` | issue descriptions, the `Source:` line dropped since `--project` carries the intent association | placeholder to `Backlog`, approved spec to `Todo`, each edge `relation add <id> blocked-by <blocker>`, one label and a priority each |
 | Standalone requirement approved | `spec`, standalone path | team-level issue description with a `Source:` link to the approved report or requirement in the first line, no project or intent required | approved spec to `Todo`, one label and a priority |
-| Issue picked up | `plan`, unless trivial by its own test | Linear Document on the issue, title `Plan` | issue to `In Preparation`; the project's first pickup also moves it to `started` |
-| Building | | branch, as the repo makes branches | issue to `In Flight` |
-| PR opens | `pr` | the PR | issue to `In Review` |
+| Issue picked up | `plan`, unless trivial by its own test | Linear Document on the issue, title `Plan` | issue to `In Progress`; the project's first pickup also moves it to `started` |
+| Building | | branch, as the repo makes branches | |
+| PR opens | `pr` | the PR | |
 | PR merges | | close-out comment | issue to `Done` |
 | Project complete | | intent moved to `agent-docs/archive/<slug>.md`, landed on main | overview link repointed (the `projectUpdate` recipe in the `linear` skill), project to `completed` |
 
 ## States
 
-No integration moves an issue; every transition is one `linear issue update <ID> --state "<Name>"` at the moment its event fires.
+No integration moves an issue; every transition is one `linear issue update <ID> --state "<Name>"` at the moment its event fires. The states are Linear's stock six, unchanged on every team, so a new team needs no setup.
 
 | Event | State |
 |---|---|
-| Captured, not yet sized or specced | `Ideas` |
-| Placeholder published: a title and one sentence | `Backlog` |
+| Captured, or a placeholder published: no approved spec yet | `Backlog` |
 | Spec written and approved | `Todo` |
-| Picked up: plan | `In Preparation` |
-| Building | `In Flight` |
-| PR opens | `In Review` |
+| Picked up, through building and review | `In Progress` |
 | PR merges | `Done`, plus the close-out comment |
 | Dropped, superseded, or absorbed by a re-slice | `Canceled`, or `Duplicate` when another issue already covers it |
 
@@ -52,16 +49,19 @@ The close-out comment is one line, `Done in PR #NN (<merge sha>).`, posted with 
 
 ## Rules
 
-- Sizing. One session of work is an issue carrying a spec; more is a project carrying an intent. Same size test as a `spec` slice.
+- Sizing. One session of work is an issue carrying a spec; more is a project carrying an intent and its stop criteria. A venture is open-ended: no stop criteria, no timeline; only its projects complete.
 - An unplanned issue attaches to an active project only when it blocks that project's stop criteria. Otherwise it is team-level with no project. Use `spec`'s standalone path from its approved bug report, GitHub issue, or explicit requirement, and keep a link to that source in the first line of the body. Once the spec is approved, publish it and move the issue to `Todo` only on the user's word.
 - Promotion runs both ways. An issue that outgrows a session gets an intent and a project with itself as the first spec; a project that collapses to one slice is canceled and the issue kept.
 - Each fact has one home. The intent cites the initiative for standing constraints. Blocking order is native relations, never prose in a body. The intent is linked from Linear, never copied into it.
 - Publish blockers first, so every edge names a real id.
 - Re-slice flat. Every slice is a top-level issue; the hierarchy is the blocking graph. When the frontier reaches a placeholder that is more than one session, re-scope it into the first real slice, create the siblings, and re-examine every edge that pointed at the placeholder: it meant "blocked by all of it," and each dependent now needs a specific sibling.
-- The plan is frozen at pickup. A changed route is recorded in the PR's Decisions section, never edited into the Document.
+- Each document freezes at the last responsible moment, on its own clock: the intent once shaped, the spec at pickup, the plan at pickup, the PR at merge. Before its moment it is malleable; after it, only the cause its skill names reopens it.
+- The plan is frozen at pickup. A changed route is recorded in the PR's Decisions section, never edited into the Document. A dead approach gets a new Document on the same issue, titled `Plan 2`, then `Plan 3`; earlier ones stay as the record of what was tried, and Decisions says why the route changed.
+- One issue per PR.
 - The Linear move is always `issue update --state`; `issue start` is not used.
 - Completion is the operator's call. When every issue is terminal and the stop criteria appear met, say so and ask. On the word, the three completion actions happen together, in the order the Events row gives.
 - Ventures have one repo. When one has several, ask which holds the intent.
+- Every project sits in its venture's initiative. When no initiative fits, resolve placement with the user before creating anything.
 
 ## Not bound here
 

@@ -29,6 +29,8 @@ Bare imperative. No type prefixes (`feat:`, `fix:`), no identifiers, no trailing
 Use this template for every PR body, replacing the angle-bracket guidance:
 
 ```markdown
+Issue: <the issue this work delivers against, as a plain identifier such as `WEB-12`; no closing keyword, so no tracker automation fires. Omit the line when there is no issue.>
+
 ## What & why
 
 <2 to 4 sentences: what changed and why it was needed.>
@@ -42,4 +44,4 @@ Use this template for every PR body, replacing the angle-bracket guidance:
 <What was actually run and what was observed: commands, output, the screenshot compared. Evidence, not assertion: "tests pass" fails this section; "`bun test auth`, 14 pass, 0 fail" passes. Where the work has a spec, one line per acceptance criterion: the check and what it showed.>
 ```
 
-Done when: the grounding step has run, the title passes the apply-test with no prefix, the body follows the template above with every section filled, and Verification cites observed output, one line per acceptance criterion where a spec exists.
+Done when: the grounding step has run, the title passes the apply-test with no prefix, the body follows the template above with every section filled and the issue line present whenever an issue exists, and Verification cites observed output, one line per acceptance criterion where a spec exists.

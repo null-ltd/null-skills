@@ -33,4 +33,4 @@ The successor reads this file verbatim. Before writing it, strip secrets, API ke
 
 ## 4. Deliver the path
 
-Write the handoff to a file named `YYYY-MM-DD-<slug>.md`, slug from the work (`2026-09-01-auth-token-refresh.md`). The path is the deliverable; the user hands it to the next session. End your reply with the full absolute path, prominent and on its own line.
+Write the handoff into the directory the project's context files name for handoffs; when none is named, ask where before writing. File name `YYYY-MM-DD-<slug>.md`, slug from the work (`2026-09-01-auth-token-refresh.md`). The path is the deliverable; the user hands it to the next session. End your reply with the full absolute path, prominent and on its own line.
