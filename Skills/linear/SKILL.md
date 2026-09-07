@@ -48,7 +48,7 @@ linear issue create --title "<imperative title>" --description-file ./spec.md \
 Move state, comment, wire a blocking edge:
 
 ```bash
-linear issue update WEB-12 --state "In Flight"
+linear issue update WEB-12 --state "In Progress"
 linear issue comment add WEB-12 --body-file ./comment.md
 linear issue relation add WEB-14 blocked-by WEB-12
 linear issue relation list WEB-14
@@ -88,7 +88,7 @@ linear issue comment add WEB-12 --attach ./screenshot.png
 - `project update` has no `--content` or `--content-file`. Changing an overview after creation is the GraphQL fallback below.
 - `project view` has no `--json`; a project's overview is read through the GraphQL fallback.
 - `project --description` is capped at 255 characters by the API; the overview (`--content-file`) is not.
-- `issue query --state` and `issue list --state` filter by state type, never by name: `Ideas` and `Backlog` are both `backlog`, `Todo` is `unstarted`, `In Preparation`, `In Flight`, and `In Review` are all `started`. Filter by type, then read `state.name` in the JSON.
+- `issue query --state` and `issue list --state` filter by state type, never by name: `backlog`, `unstarted`, `started`, `completed`, `canceled`, `duplicate`. When a team has two states of one type, read `state.name` in the JSON to tell them apart.
 - `--no-pager` exists only on `issue list` and `issue query`; other commands error on it.
 - `issue list` needs `--team <key>` unless the repo pin supplies it.
 
@@ -116,7 +116,7 @@ mutation($id: String!, $content: String!) {
 }
 GRAPHQL
 
-linear api --variables-json '{"filter": {"state": {"name": {"eq": "In Flight"}}}}' <<'GRAPHQL'
+linear api --variables-json '{"filter": {"state": {"name": {"eq": "In Progress"}}}}' <<'GRAPHQL'
 query($filter: IssueFilter!) { issues(filter: $filter) { nodes { identifier title } } }
 GRAPHQL
 ```
